@@ -20,6 +20,15 @@ class Docker implements Serializable {
         }
     }
 
+    def deployToAWS(String imageName, String hostName) {
+        def appInit = "bash ./initScript.sh $imageName"
+        script.sshagent(['jenkins_ssh_to_aws']) {
+            script.sh "scp ./docker-compose.yaml $hostName:/home/ec2-user"
+            script.sh "scp ./initScript.sh $hostName:/home/ec2-user"
+            script.sh "ssh -o StrictHostKeyChecking=no $hostName ${appInit}"
+        }
+    }
+
     def dockerPushImage(String imageName) {
         script.sh "docker push $imageName"
     }
