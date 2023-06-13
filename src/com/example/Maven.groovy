@@ -28,4 +28,18 @@ class Maven implements Serializable {
     def mavenTestApp(){
         script.sh 'mvn test'
     }
+
+    def updatePom(){
+        script.withCredentials([script.usernamePassword(credentialsId: 'gh_token_for_jenkins', passwordVariable: 'PASS', usernameVariable: 'USER')]){
+
+            script.sh 'git config --global user.email "jenkins@gmail.com"'
+            script.sh 'git config --global user.name "jenkins"'
+
+            script.sh "git remote set-url origin https://${script.USER}:${script.PASS}@github.com/RancidRabbit/awsSpringTEst.git"
+            script.sh 'git add pom.xml'
+            script.sh 'git commit -m "updating version in pom.xml"'
+
+            script.sh 'git push origin HEAD:main'
+        }
+    }
 }
