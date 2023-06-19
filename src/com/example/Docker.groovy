@@ -24,8 +24,8 @@ class Docker implements Serializable {
         def appInit = "bash ./initScript.sh $imageName"
         script.sshagent(['jenkins_ssh_to_aws']) {
             // how one should configure OS to scp files without specifying .pem file :0
-            script.sh "scp -i ~/Загрузки/my-pair.pem ./docker-compose.yaml $hostName:/home/ec2-user"
-            script.sh "scp -i ~/Загрузки/my-pair.pem ./initScript.sh $hostName:/home/ec2-user"
+            script.sh "scp  ./docker-compose.yaml $hostName:/home/ec2-user"
+            script.sh "scp  ./initScript.sh $hostName:/home/ec2-user"
             script.sh "ssh -o StrictHostKeyChecking=no $hostName ${appInit}"
         }
     }
